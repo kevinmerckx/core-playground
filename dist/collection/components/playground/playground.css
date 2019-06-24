@@ -1,0 +1,45 @@
+
+:host {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  width: var(--my-playground-width);
+  height: var(--my-playground-height);
+  font-size: var(--my-playground-font-size);
+}
+
+aside {
+  flex: 0 0 auto;
+  width: var(--my-playground-menu-width);
+  height: 100%;
+  background: var(--my-playground-menu-bg-color);
+  color: var(--my-playground-menu-color);
+  box-shadow: 2px 0 2px 0 rgba(0, 0, 0, 0.5);
+  overflow: auto;
+}
+
+main {
+  flex: 1 1;
+  height: 100%;
+  overflow: auto;
+  padding: 10px;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  height: 40px;
+  line-height: 40px;
+  padding: 0 10px;
+  cursor: pointer;
+  transition: color 0.5s, background 0.5s;
+}
+
+li:hover, li:focus, li.active {
+  color: var(--my-playground-menu-color-active);
+  background: var(--my-playground-menu-bg-color-active);
+}
