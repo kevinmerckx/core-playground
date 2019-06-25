@@ -148,7 +148,7 @@ const patchEsm = () => {
 };
 const patchBrowser = async () => {
     // @ts-ignore
-    const importMeta = (typeof document === 'undefined' ? new (require('u' + 'rl').URL)('file:' + __filename).href : (document.currentScript && document.currentScript.src || new URL('chunk-cd1f6529.js', document.baseURI).href));
+    const importMeta = (typeof document === 'undefined' ? new (require('u' + 'rl').URL)('file:' + __filename).href : (document.currentScript && document.currentScript.src || new URL('chunk-c9423157.js', document.baseURI).href));
     if (importMeta !== '') {
         return Promise.resolve(new URL('.', importMeta).href);
     }
@@ -1447,9 +1447,22 @@ const bootstrapLazy = (lazyBundles, options = {}) => {
     head.insertBefore(visibilityStyle, y ? y.nextSibling : head.firstChild);
 };
 
+const createEvent = (ref, name, flags) => {
+    const elm = getElement(ref);
+    return {
+        emit: (detail) => elm.dispatchEvent(new (CustomEvent)(name, {
+            bubbles: !!(flags & 4 /* Bubbles */),
+            composed: !!(flags & 2 /* Composed */),
+            cancelable: !!(flags & 1 /* Cancellable */),
+            detail
+        }))
+    };
+};
+
 const getElement = (ref) => getHostRef(ref).$hostElement$;
 
 exports.bootstrapLazy = bootstrapLazy;
+exports.createEvent = createEvent;
 exports.getElement = getElement;
 exports.h = h;
 exports.patchBrowser = patchBrowser;

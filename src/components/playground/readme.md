@@ -5,6 +5,13 @@
 <!-- Auto Generated Below -->
 
 
+## Events
+
+| Event           | Description | Type                  |
+| --------------- | ----------- | --------------------- |
+| `sectionChange` |             | `CustomEvent<string>` |
+
+
 ## Methods
 
 ### `addSection(slot: string) => Promise<void>`

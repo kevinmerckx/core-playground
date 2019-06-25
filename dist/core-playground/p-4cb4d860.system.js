@@ -1,0 +1,1 @@
+System.register(["./p-565e9835.system.js"],function(){"use strict";var e,t;return{setters:[function(n){e=n.p;t=n.b}],execute:function(){e().then(function(e){return t([["p-0ini72dk.system",[[1,"my-playground",{selectedSection:[32],sections:[32],addSection:[64]}],[1,"playground-section",{slot:[1]}]]]],{resourcesUrl:e})})}}});

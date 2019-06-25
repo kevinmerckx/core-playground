@@ -1,4 +1,4 @@
-import { Component, h, State, Method } from '@stencil/core';
+import { Component, h, State, Method, Event, EventEmitter, ComponentDidLoad } from '@stencil/core';
 import { PlaygroundSection, SEPARATOR } from '../../utils/utils';
 
 @Component({
@@ -6,7 +6,9 @@ import { PlaygroundSection, SEPARATOR } from '../../utils/utils';
   styleUrl: 'playground.css',
   shadow: true
 })
-export class PlaygroundComponent {
+export class PlaygroundComponent implements ComponentDidLoad {
+  @Event() sectionChange: EventEmitter<string>;
+
   @State() private selectedSection: string;
   @State() private sections: PlaygroundSection[] = [];
 
@@ -28,6 +30,10 @@ export class PlaygroundComponent {
 
   constructor() {
     this.selectedSection = localStorage.getItem('core-playground:selectedSection') || '';
+  }
+
+  componentDidLoad() {
+    this.sectionChange.emit(this.selectedSection);
   }
 
   @Method()
@@ -65,6 +71,7 @@ export class PlaygroundComponent {
   select(section: string) {
     this.selectedSection = section;
     localStorage.setItem('core-playground:selectedSection', this.selectedSection);
+    this.sectionChange.emit(this.selectedSection);
   }
 
   getTree(sections: PlaygroundSection[], depth = 0) {

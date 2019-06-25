@@ -104,7 +104,9 @@
 
     <div slot="playground-custom-area">Hello</div>
   </my-playground>
+  <script>
+    document.querySelector('my-playground').addEventListener('sectionChange', event => console.log(event.detail));
+  </script>
 
 </body>
-
 </html>

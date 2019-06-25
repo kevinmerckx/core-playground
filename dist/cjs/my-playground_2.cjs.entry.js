@@ -2,7 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-const __chunk_1 = require('./chunk-cd1f6529.js');
+const __chunk_1 = require('./chunk-c9423157.js');
 
 const SEPARATOR = '/';
 
@@ -11,6 +11,7 @@ class PlaygroundComponent {
         __chunk_1.registerInstance(this, hostRef);
         this.sections = [];
         this.selectedSection = localStorage.getItem('core-playground:selectedSection') || '';
+        this.sectionChange = __chunk_1.createEvent(this, "sectionChange", 7);
     }
     get currentSection() {
         const aux = (sections) => {
@@ -26,6 +27,9 @@ class PlaygroundComponent {
         };
         const section = aux(this.sections);
         return section ? section.slot : '';
+    }
+    componentDidLoad() {
+        this.sectionChange.emit(this.selectedSection);
     }
     async addSection(slot) {
         const addAux = (split, sections) => {
@@ -61,6 +65,7 @@ class PlaygroundComponent {
     select(section) {
         this.selectedSection = section;
         localStorage.setItem('core-playground:selectedSection', this.selectedSection);
+        this.sectionChange.emit(this.selectedSection);
     }
     getTree(sections, depth = 0) {
         if (sections.length === 0) {

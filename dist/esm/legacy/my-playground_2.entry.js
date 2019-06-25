@@ -33,13 +33,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { r as registerInstance, h, g as getElement } from './chunk-e6ffb951.js';
+import { r as registerInstance, c as createEvent, h, g as getElement } from './chunk-04ee945b.js';
 var SEPARATOR = '/';
 var PlaygroundComponent = /** @class */ (function () {
     function PlaygroundComponent(hostRef) {
         registerInstance(this, hostRef);
         this.sections = [];
         this.selectedSection = localStorage.getItem('core-playground:selectedSection') || '';
+        this.sectionChange = createEvent(this, "sectionChange", 7);
     }
     Object.defineProperty(PlaygroundComponent.prototype, "currentSection", {
         get: function () {
@@ -61,6 +62,9 @@ var PlaygroundComponent = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    PlaygroundComponent.prototype.componentDidLoad = function () {
+        this.sectionChange.emit(this.selectedSection);
+    };
     PlaygroundComponent.prototype.addSection = function (slot) {
         return __awaiter(this, void 0, void 0, function () {
             var addAux, sortAux;
@@ -101,6 +105,7 @@ var PlaygroundComponent = /** @class */ (function () {
     PlaygroundComponent.prototype.select = function (section) {
         this.selectedSection = section;
         localStorage.setItem('core-playground:selectedSection', this.selectedSection);
+        this.sectionChange.emit(this.selectedSection);
     };
     PlaygroundComponent.prototype.getTree = function (sections, depth) {
         var _this = this;

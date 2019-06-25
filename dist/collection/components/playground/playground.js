@@ -20,6 +20,9 @@ export class PlaygroundComponent {
         const section = aux(this.sections);
         return section ? section.slot : '';
     }
+    componentDidLoad() {
+        this.sectionChange.emit(this.selectedSection);
+    }
     async addSection(slot) {
         const addAux = (split, sections) => {
             if (split.length === 0) {
@@ -54,6 +57,7 @@ export class PlaygroundComponent {
     select(section) {
         this.selectedSection = section;
         localStorage.setItem('core-playground:selectedSection', this.selectedSection);
+        this.sectionChange.emit(this.selectedSection);
     }
     getTree(sections, depth = 0) {
         if (sections.length === 0) {
@@ -103,6 +107,22 @@ export class PlaygroundComponent {
         "selectedSection": {},
         "sections": {}
     }; }
+    static get events() { return [{
+            "method": "sectionChange",
+            "name": "sectionChange",
+            "bubbles": true,
+            "cancelable": true,
+            "composed": true,
+            "docs": {
+                "tags": [],
+                "text": ""
+            },
+            "complexType": {
+                "original": "string",
+                "resolved": "string",
+                "references": {}
+            }
+        }]; }
     static get methods() { return {
         "addSection": {
             "complexType": {

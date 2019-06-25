@@ -40,7 +40,9 @@ declare global {
 }
 
 declare namespace LocalJSX {
-  interface MyPlayground extends JSXBase.HTMLAttributes<HTMLMyPlaygroundElement> {}
+  interface MyPlayground extends JSXBase.HTMLAttributes<HTMLMyPlaygroundElement> {
+    'onSectionChange'?: (event: CustomEvent<string>) => void;
+  }
   interface PlaygroundSection extends JSXBase.HTMLAttributes<HTMLPlaygroundSectionElement> {
     'slot'?: string;
   }

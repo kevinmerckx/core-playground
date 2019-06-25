@@ -1,4 +1,4 @@
-import { r as registerInstance, h, g as getElement } from './chunk-e6ffb951.js';
+import { r as registerInstance, c as createEvent, h, g as getElement } from './chunk-04ee945b.js';
 
 const SEPARATOR = '/';
 
@@ -7,6 +7,7 @@ class PlaygroundComponent {
         registerInstance(this, hostRef);
         this.sections = [];
         this.selectedSection = localStorage.getItem('core-playground:selectedSection') || '';
+        this.sectionChange = createEvent(this, "sectionChange", 7);
     }
     get currentSection() {
         const aux = (sections) => {
@@ -22,6 +23,9 @@ class PlaygroundComponent {
         };
         const section = aux(this.sections);
         return section ? section.slot : '';
+    }
+    componentDidLoad() {
+        this.sectionChange.emit(this.selectedSection);
     }
     async addSection(slot) {
         const addAux = (split, sections) => {
@@ -57,6 +61,7 @@ class PlaygroundComponent {
     select(section) {
         this.selectedSection = section;
         localStorage.setItem('core-playground:selectedSection', this.selectedSection);
+        this.sectionChange.emit(this.selectedSection);
     }
     getTree(sections, depth = 0) {
         if (sections.length === 0) {
