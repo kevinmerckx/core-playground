@@ -7,7 +7,6 @@ import { Component, ComponentDidLoad, Element, h, Prop } from '@stencil/core';
 })
 export class PlaygroundSectionComponent implements ComponentDidLoad {
   @Prop() slot = '';
-
   @Element() element: HTMLElement;
 
   componentDidLoad() {

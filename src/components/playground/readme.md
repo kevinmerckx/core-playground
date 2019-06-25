@@ -7,7 +7,7 @@
 
 ## Methods
 
-### `addSection(name: string) => Promise<void>`
+### `addSection(slot: string) => Promise<void>`
 
 
 

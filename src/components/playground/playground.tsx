@@ -1,5 +1,11 @@
 import { Component, h, State, Method } from '@stencil/core';
 
+export type PlaygroundSection = {
+  name: string
+  children: PlaygroundSection[]
+  slot: string
+};
+
 @Component({
   tag: 'my-playground',
   styleUrl: 'playground.css',
@@ -7,11 +13,22 @@ import { Component, h, State, Method } from '@stencil/core';
 })
 export class PlaygroundComponent {
   @State() private selectedSection: string;
-  @State() private sections: { name: string }[] = [];
+  @State() private sections: PlaygroundSection[] = [];
 
   private get currentSection(): string {
-    return this.sections.find(s => s.name === this.selectedSection) ?
-      this.selectedSection : (this.sections[0] ? this.sections[0].name : this.selectedSection);
+    const aux = (sections: PlaygroundSection[]) => {
+      return sections.reduce((acc, curr) => {
+        if (acc) {
+          return acc;
+        }
+        if (curr.slot === this.selectedSection) {
+          return curr;
+        }
+        return aux(curr.children);
+      }, undefined);
+    };
+    const section = aux(this.sections);
+    return section ? section.slot : '';
   }
 
   constructor() {
@@ -19,14 +36,34 @@ export class PlaygroundComponent {
   }
 
   @Method()
-  async addSection(name: string) {
-    this.sections = [
-      ...this.sections,
-      { name }
-    ];
-    this.sections.sort((a, b) => a.name.localeCompare(b.name));
+  async addSection(slot: string) {
+    const addAux = (split: string[], sections: PlaygroundSection[]) => {
+      if (split.length === 0) {
+        return sections;
+      }
+      const name = split[0];
+      const section = sections.find(s => s.name === name);
+      if (section) {
+        section.children = addAux(split.slice(1), section.children);
+        return sections;
+      } else {
+        const newSection: PlaygroundSection = {
+          name,
+          children: addAux(split.slice(1), []),
+          slot: split.length === 1 ? slot : undefined
+        };
+        return sections.concat(newSection);
+      }
+    };
+    const sortAux = (sections: PlaygroundSection[]) => {
+      const tmp = sections.slice(0);
+      tmp.sort((a, b) => a.name.localeCompare(b.name));
+      tmp.forEach(a => a.children = sortAux(a.children));
+      return tmp;
+    };
+    this.sections = sortAux(addAux(slot.split('.'), this.sections));
     if (!this.selectedSection) {
-      this.select(name);
+      this.select(slot);
     }
   }
 
@@ -35,17 +72,41 @@ export class PlaygroundComponent {
     localStorage.setItem('core-playground:selectedSection', this.selectedSection);
   }
 
+  getTree(sections: PlaygroundSection[], depth = 0) {
+    if (sections.length === 0) {
+      return '';
+    }
+    return <ul>
+      {sections.map(section => {
+        const style = {
+          'padding-left': `${10 + 20 * depth}px`
+        };
+        return <li>
+          <div 
+            class={'node ' + (this.currentSection === section.slot ? 'active' : '')}
+            style={style} onClick={() => {
+            if (section.children.length > 0) {
+              const aux = (tmp: PlaygroundSection[]): string => {
+                if (tmp[0].children.length > 0) {
+                  return aux(tmp[0].children);
+                }
+                return tmp[0].slot;
+              };
+              this.select(aux(section.children));
+            } else {
+              this.select(section.slot);
+            }
+          }}>{section.name}</div>
+          {this.getTree(section.children, depth + 1)}
+        </li>
+      })}
+    </ul>;
+  }
+
   render() {
     return [
       <aside>
-        <ul>
-          {this.sections.map(section =>
-            <li
-              onClick={() => this.select(section.name)}
-              class={this.currentSection === section.name ? 'active' : ''}
-            >{section.name}</li>)
-          }
-        </ul>
+        {this.getTree(this.sections)}
         <div class='custom-area'>
           <slot name='playground-custom-area' />
         </div>

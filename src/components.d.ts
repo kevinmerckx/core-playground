@@ -6,11 +6,13 @@
 
 
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
-
+import {
+  PlaygroundSection,
+} from './components/playground/playground';
 
 export namespace Components {
   interface MyPlayground {
-    'addSection': (name: string) => Promise<void>;
+    'addSection': (slot: string) => Promise<void>;
   }
   interface PlaygroundSection {
     'slot': string;

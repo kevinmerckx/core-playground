@@ -43,21 +43,55 @@ var PlaygroundComponent = /** @class */ (function () {
     Object.defineProperty(PlaygroundComponent.prototype, "currentSection", {
         get: function () {
             var _this = this;
-            return this.sections.find(function (s) { return s.name === _this.selectedSection; }) ?
-                this.selectedSection : (this.sections[0] ? this.sections[0].name : this.selectedSection);
+            var aux = function (sections) {
+                return sections.reduce(function (acc, curr) {
+                    if (acc) {
+                        return acc;
+                    }
+                    if (curr.slot === _this.selectedSection) {
+                        return curr;
+                    }
+                    return aux(curr.children);
+                }, undefined);
+            };
+            var section = aux(this.sections);
+            return section ? section.slot : '';
         },
         enumerable: true,
         configurable: true
     });
-    PlaygroundComponent.prototype.addSection = function (name) {
+    PlaygroundComponent.prototype.addSection = function (slot) {
         return __awaiter(this, void 0, void 0, function () {
+            var addAux, sortAux;
             return __generator(this, function (_a) {
-                this.sections = this.sections.concat([
-                    { name: name }
-                ]);
-                this.sections.sort(function (a, b) { return a.name.localeCompare(b.name); });
+                addAux = function (split, sections) {
+                    if (split.length === 0) {
+                        return sections;
+                    }
+                    var name = split[0];
+                    var section = sections.find(function (s) { return s.name === name; });
+                    if (section) {
+                        section.children = addAux(split.slice(1), section.children);
+                        return sections;
+                    }
+                    else {
+                        var newSection = {
+                            name: name,
+                            children: addAux(split.slice(1), []),
+                            slot: split.length === 1 ? slot : undefined
+                        };
+                        return sections.concat(newSection);
+                    }
+                };
+                sortAux = function (sections) {
+                    var tmp = sections.slice(0);
+                    tmp.sort(function (a, b) { return a.name.localeCompare(b.name); });
+                    tmp.forEach(function (a) { return a.children = sortAux(a.children); });
+                    return tmp;
+                };
+                this.sections = sortAux(addAux(slot.split('.'), this.sections));
                 if (!this.selectedSection) {
-                    this.select(name);
+                    this.select(slot);
                 }
                 return [2 /*return*/];
             });
@@ -67,15 +101,40 @@ var PlaygroundComponent = /** @class */ (function () {
         this.selectedSection = section;
         localStorage.setItem('core-playground:selectedSection', this.selectedSection);
     };
-    PlaygroundComponent.prototype.render = function () {
+    PlaygroundComponent.prototype.getTree = function (sections, depth) {
         var _this = this;
+        if (depth === void 0) { depth = 0; }
+        if (sections.length === 0) {
+            return '';
+        }
+        return h("ul", null, sections.map(function (section) {
+            var style = {
+                'padding-left': 10 + 20 * depth + "px"
+            };
+            return h("li", null, h("div", { class: 'node ' + (_this.currentSection === section.slot ? 'active' : ''), style: style, onClick: function () {
+                    if (section.children.length > 0) {
+                        var aux_1 = function (tmp) {
+                            if (tmp[0].children.length > 0) {
+                                return aux_1(tmp[0].children);
+                            }
+                            return tmp[0].slot;
+                        };
+                        _this.select(aux_1(section.children));
+                    }
+                    else {
+                        _this.select(section.slot);
+                    }
+                } }, section.name), _this.getTree(section.children, depth + 1));
+        }));
+    };
+    PlaygroundComponent.prototype.render = function () {
         return [
-            h("aside", null, h("ul", null, this.sections.map(function (section) { return h("li", { onClick: function () { return _this.select(section.name); }, class: _this.currentSection === section.name ? 'active' : '' }, section.name); })), h("div", { class: 'custom-area' }, h("slot", { name: 'playground-custom-area' }))),
+            h("aside", null, this.getTree(this.sections), h("div", { class: 'custom-area' }, h("slot", { name: 'playground-custom-area' }))),
             h("main", null, h("slot", { name: this.currentSection }))
         ];
     };
     Object.defineProperty(PlaygroundComponent, "style", {
-        get: function () { return ":host{-ms-flex-direction:row;flex-direction:row;width:var(--my-playground-width);height:var(--my-playground-height);font-size:var(--my-playground-font-size)}:host,aside{display:-ms-flexbox;display:flex;overflow:hidden}aside{-ms-flex:0 0 auto;flex:0 0 auto;width:var(--my-playground-menu-width);height:100%;background:var(--my-playground-menu-bg-color);color:var(--my-playground-menu-color);-webkit-box-shadow:2px 0 2px 0 rgba(0,0,0,.5);box-shadow:2px 0 2px 0 rgba(0,0,0,.5);-ms-flex-direction:column;flex-direction:column}main{height:100%;padding:10px}main,ul{-ms-flex:1 1;flex:1 1;overflow:auto}ul{list-style:none;margin:0;padding:0}li{height:40px;line-height:40px;padding:0 10px;cursor:pointer;-webkit-transition:color .5s,background .5s;transition:color .5s,background .5s}li.active,li:focus,li:hover{color:var(--my-playground-menu-color-active);background:var(--my-playground-menu-bg-color-active)}.custom-area{-ms-flex:0 0 auto;flex:0 0 auto}"; },
+        get: function () { return ":host{-ms-flex-direction:row;flex-direction:row;width:var(--my-playground-width);height:var(--my-playground-height);font-size:var(--my-playground-font-size)}:host,aside{display:-ms-flexbox;display:flex;overflow:hidden}aside{-ms-flex:0 0 auto;flex:0 0 auto;width:var(--my-playground-menu-width);height:100%;background:var(--my-playground-menu-bg-color);color:var(--my-playground-menu-color);-webkit-box-shadow:2px 0 2px 0 rgba(0,0,0,.5);box-shadow:2px 0 2px 0 rgba(0,0,0,.5);-ms-flex-direction:column;flex-direction:column}main{height:100%;padding:10px}main,ul{-ms-flex:1 1;flex:1 1;overflow:auto}ul{list-style:none;margin:0;padding:0}li .node{height:40px;line-height:40px;padding:0 10px;cursor:pointer;-webkit-transition:color .5s,background .5s;transition:color .5s,background .5s}.node.active,.node:focus,.node:hover{color:var(--my-playground-menu-color-active);background:var(--my-playground-menu-bg-color-active)}.custom-area{-ms-flex:0 0 auto;flex:0 0 auto}"; },
         enumerable: true,
         configurable: true
     });
