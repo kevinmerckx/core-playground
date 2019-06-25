@@ -1,1 +1,1 @@
-import{p as s,b as e}from"./p-b0866405.js";s().then(s=>e([["p-arsqg8mq",[[1,"my-playground",{selectedSection:[32],sections:[32],addSection:[64]}],[1,"playground-section",{slot:[1]}]]]],{resourcesUrl:s}));
+import{p as e,b as o}from"./p-b0866405.js";e().then(e=>o([["p-cegu5flg",[[1,"my-playground",{selectedSection:[32],sections:[32],addSection:[64]}],[1,"playground-section",{slot:[1]}]]]],{resourcesUrl:e}));

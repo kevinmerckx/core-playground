@@ -4,6 +4,10 @@ export class PlaygroundComponent {
         this.sections = [];
         this.selectedSection = localStorage.getItem('core-playground:selectedSection') || '';
     }
+    get currentSection() {
+        return this.sections.find(s => s.name === this.selectedSection) ?
+            this.selectedSection : (this.sections[0] ? this.sections[0].name : this.selectedSection);
+    }
     async addSection(name) {
         this.sections = [
             ...this.sections,
@@ -21,9 +25,9 @@ export class PlaygroundComponent {
     render() {
         return [
             h("aside", null,
-                h("ul", null, this.sections.map(section => h("li", { onClick: () => this.select(section.name), class: this.selectedSection === section.name ? 'active' : '' }, section.name)))),
+                h("ul", null, this.sections.map(section => h("li", { onClick: () => this.select(section.name), class: this.currentSection === section.name ? 'active' : '' }, section.name)))),
             h("main", null,
-                h("slot", { name: this.selectedSection }))
+                h("slot", { name: this.currentSection }))
         ];
     }
     static get is() { return "my-playground"; }

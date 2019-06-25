@@ -40,6 +40,15 @@ var PlaygroundComponent = /** @class */ (function () {
         this.sections = [];
         this.selectedSection = localStorage.getItem('core-playground:selectedSection') || '';
     }
+    Object.defineProperty(PlaygroundComponent.prototype, "currentSection", {
+        get: function () {
+            var _this = this;
+            return this.sections.find(function (s) { return s.name === _this.selectedSection; }) ?
+                this.selectedSection : (this.sections[0] ? this.sections[0].name : this.selectedSection);
+        },
+        enumerable: true,
+        configurable: true
+    });
     PlaygroundComponent.prototype.addSection = function (name) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -61,8 +70,8 @@ var PlaygroundComponent = /** @class */ (function () {
     PlaygroundComponent.prototype.render = function () {
         var _this = this;
         return [
-            h("aside", null, h("ul", null, this.sections.map(function (section) { return h("li", { onClick: function () { return _this.select(section.name); }, class: _this.selectedSection === section.name ? 'active' : '' }, section.name); }))),
-            h("main", null, h("slot", { name: this.selectedSection }))
+            h("aside", null, h("ul", null, this.sections.map(function (section) { return h("li", { onClick: function () { return _this.select(section.name); }, class: _this.currentSection === section.name ? 'active' : '' }, section.name); }))),
+            h("main", null, h("slot", { name: this.currentSection }))
         ];
     };
     Object.defineProperty(PlaygroundComponent, "style", {
