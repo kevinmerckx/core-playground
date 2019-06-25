@@ -25,7 +25,9 @@ export class PlaygroundComponent {
     render() {
         return [
             h("aside", null,
-                h("ul", null, this.sections.map(section => h("li", { onClick: () => this.select(section.name), class: this.currentSection === section.name ? 'active' : '' }, section.name)))),
+                h("ul", null, this.sections.map(section => h("li", { onClick: () => this.select(section.name), class: this.currentSection === section.name ? 'active' : '' }, section.name))),
+                h("div", { class: 'custom-area' },
+                    h("slot", { name: 'playground-custom-area' }))),
             h("main", null,
                 h("slot", { name: this.currentSection }))
         ];

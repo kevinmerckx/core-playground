@@ -1,7 +1,7 @@
 {
   "entries": [
-    "components/playground/playground.js",
-    "components/playground-section/playground-section.js"
+    "components/playground-section/playground-section.js",
+    "components/playground/playground.js"
   ],
   "compiler": {
     "name": "@stencil/core",

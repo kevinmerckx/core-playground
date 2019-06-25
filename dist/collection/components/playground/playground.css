@@ -15,7 +15,9 @@ aside {
   background: var(--my-playground-menu-bg-color);
   color: var(--my-playground-menu-color);
   box-shadow: 2px 0 2px 0 rgba(0, 0, 0, 0.5);
-  overflow: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 main {
@@ -29,6 +31,8 @@ ul {
   list-style: none;
   margin: 0;
   padding: 0;
+  flex: 1 1;
+  overflow: auto;
 }
 
 li {
@@ -42,4 +46,8 @@ li {
 li:hover, li:focus, li.active {
   color: var(--my-playground-menu-color-active);
   background: var(--my-playground-menu-bg-color-active);
+}
+
+.custom-area {
+  flex: 0 0 auto;
 }

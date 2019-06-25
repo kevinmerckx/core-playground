@@ -46,6 +46,9 @@ export class PlaygroundComponent {
             >{section.name}</li>)
           }
         </ul>
+        <div class='custom-area'>
+          <slot name='playground-custom-area' />
+        </div>
       </aside>,
       <main>
         <slot name={this.currentSection}></slot>
