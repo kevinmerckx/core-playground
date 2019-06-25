@@ -34,6 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { r as registerInstance, h, g as getElement } from './chunk-e6ffb951.js';
+var SEPARATOR = '/';
 var PlaygroundComponent = /** @class */ (function () {
     function PlaygroundComponent(hostRef) {
         registerInstance(this, hostRef);
@@ -89,7 +90,7 @@ var PlaygroundComponent = /** @class */ (function () {
                     tmp.forEach(function (a) { return a.children = sortAux(a.children); });
                     return tmp;
                 };
-                this.sections = sortAux(addAux(slot.split('.'), this.sections));
+                this.sections = sortAux(addAux(slot.split(SEPARATOR), this.sections));
                 if (!this.selectedSection) {
                     this.select(slot);
                 }
@@ -149,8 +150,15 @@ var PlaygroundSectionComponent = /** @class */ (function () {
         this.element.parentElement.addSection(this.slot);
     };
     PlaygroundSectionComponent.prototype.render = function () {
-        return [h("h1", null, this.slot), h("slot", null)];
+        return [h("h1", null, this.title), h("slot", null)];
     };
+    Object.defineProperty(PlaygroundSectionComponent.prototype, "title", {
+        get: function () {
+            return this.slot.split('/').join(' / ');
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(PlaygroundSectionComponent.prototype, "element", {
         get: function () { return getElement(this); },
         enumerable: true,

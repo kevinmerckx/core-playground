@@ -1,10 +1,5 @@
 import { Component, h, State, Method } from '@stencil/core';
-
-export type PlaygroundSection = {
-  name: string
-  children: PlaygroundSection[]
-  slot: string
-};
+import { PlaygroundSection, SEPARATOR } from '../../utils/utils';
 
 @Component({
   tag: 'my-playground',
@@ -61,7 +56,7 @@ export class PlaygroundComponent {
       tmp.forEach(a => a.children = sortAux(a.children));
       return tmp;
     };
-    this.sections = sortAux(addAux(slot.split('.'), this.sections));
+    this.sections = sortAux(addAux(slot.split(SEPARATOR), this.sections));
     if (!this.selectedSection) {
       this.select(slot);
     }

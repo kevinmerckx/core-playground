@@ -4,6 +4,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 const __chunk_1 = require('./chunk-cd1f6529.js');
 
+const SEPARATOR = '/';
+
 class PlaygroundComponent {
     constructor(hostRef) {
         __chunk_1.registerInstance(this, hostRef);
@@ -51,7 +53,7 @@ class PlaygroundComponent {
             tmp.forEach(a => a.children = sortAux(a.children));
             return tmp;
         };
-        this.sections = sortAux(addAux(slot.split('.'), this.sections));
+        this.sections = sortAux(addAux(slot.split(SEPARATOR), this.sections));
         if (!this.selectedSection) {
             this.select(slot);
         }
@@ -102,7 +104,10 @@ class PlaygroundSectionComponent {
         this.element.parentElement.addSection(this.slot);
     }
     render() {
-        return [__chunk_1.h("h1", null, this.slot), __chunk_1.h("slot", null)];
+        return [__chunk_1.h("h1", null, this.title), __chunk_1.h("slot", null)];
+    }
+    get title() {
+        return this.slot.split('/').join(' / ');
     }
     get element() { return __chunk_1.getElement(this); }
     static get style() { return "h1{margin-top:0;color:var(--my-playground-section-title-color)}"; }

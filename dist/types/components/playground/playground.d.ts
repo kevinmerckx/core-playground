@@ -1,8 +1,4 @@
-export declare type PlaygroundSection = {
-    name: string;
-    children: PlaygroundSection[];
-    slot: string;
-};
+import { PlaygroundSection } from '../../utils/utils';
 export declare class PlaygroundComponent {
     private selectedSection;
     private sections;

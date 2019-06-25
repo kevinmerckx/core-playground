@@ -1,4 +1,5 @@
 import { h } from '@stencil/core';
+import { SEPARATOR } from '../../utils/utils';
 export class PlaygroundComponent {
     constructor() {
         this.sections = [];
@@ -45,7 +46,7 @@ export class PlaygroundComponent {
             tmp.forEach(a => a.children = sortAux(a.children));
             return tmp;
         };
-        this.sections = sortAux(addAux(slot.split('.'), this.sections));
+        this.sections = sortAux(addAux(slot.split(SEPARATOR), this.sections));
         if (!this.selectedSection) {
             this.select(slot);
         }
@@ -115,7 +116,8 @@ export class PlaygroundComponent {
                         "location": "global"
                     },
                     "PlaygroundSection": {
-                        "location": "local"
+                        "location": "import",
+                        "path": "../../utils/utils"
                     }
                 },
                 "return": "Promise<void>"

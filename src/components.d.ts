@@ -8,7 +8,7 @@
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 import {
   PlaygroundSection,
-} from './components/playground/playground';
+} from './utils/utils';
 
 export namespace Components {
   interface MyPlayground {

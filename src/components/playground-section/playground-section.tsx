@@ -14,6 +14,10 @@ export class PlaygroundSectionComponent implements ComponentDidLoad {
   }
 
   render() {
-    return [<h1>{this.slot}</h1>,<slot></slot>];
+    return [<h1>{this.title}</h1>,<slot></slot>];
+  }
+
+  private get title() {
+    return this.slot.split('/').join(' / ');
   }
 }

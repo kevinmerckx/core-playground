@@ -1,8 +1,8 @@
 
-export function format(first: string, middle: string, last: string): string {
-  return (
-    (first || '') +
-    (middle ? ` ${middle}` : '') +
-    (last ? ` ${last}` : '')
-  );
-}
+export const SEPARATOR = '/';
+
+export type PlaygroundSection = {
+  name: string
+  children: PlaygroundSection[]
+  slot: string
+};

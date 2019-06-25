@@ -7,7 +7,10 @@ export class PlaygroundSectionComponent {
         this.element.parentElement.addSection(this.slot);
     }
     render() {
-        return [h("h1", null, this.slot), h("slot", null)];
+        return [h("h1", null, this.title), h("slot", null)];
+    }
+    get title() {
+        return this.slot.split('/').join(' / ');
     }
     static get is() { return "playground-section"; }
     static get encapsulation() { return "shadow"; }

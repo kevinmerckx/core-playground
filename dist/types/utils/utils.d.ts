@@ -1,1 +1,6 @@
-export declare function format(first: string, middle: string, last: string): string;
+export declare const SEPARATOR = "/";
+export declare type PlaygroundSection = {
+    name: string;
+    children: PlaygroundSection[];
+    slot: string;
+};

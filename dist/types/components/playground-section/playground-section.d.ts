@@ -4,4 +4,5 @@ export declare class PlaygroundSectionComponent implements ComponentDidLoad {
     element: HTMLElement;
     componentDidLoad(): void;
     render(): any[];
+    private readonly title;
 }

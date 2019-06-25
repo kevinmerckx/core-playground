@@ -1,5 +1,7 @@
 import { r as registerInstance, h, g as getElement } from './chunk-e6ffb951.js';
 
+const SEPARATOR = '/';
+
 class PlaygroundComponent {
     constructor(hostRef) {
         registerInstance(this, hostRef);
@@ -47,7 +49,7 @@ class PlaygroundComponent {
             tmp.forEach(a => a.children = sortAux(a.children));
             return tmp;
         };
-        this.sections = sortAux(addAux(slot.split('.'), this.sections));
+        this.sections = sortAux(addAux(slot.split(SEPARATOR), this.sections));
         if (!this.selectedSection) {
             this.select(slot);
         }
@@ -98,7 +100,10 @@ class PlaygroundSectionComponent {
         this.element.parentElement.addSection(this.slot);
     }
     render() {
-        return [h("h1", null, this.slot), h("slot", null)];
+        return [h("h1", null, this.title), h("slot", null)];
+    }
+    get title() {
+        return this.slot.split('/').join(' / ');
     }
     get element() { return getElement(this); }
     static get style() { return "h1{margin-top:0;color:var(--my-playground-section-title-color)}"; }
